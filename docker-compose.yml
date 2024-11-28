@@ -1,0 +1,9 @@
+services:
+  backend:
+    build:
+      context: ./ort-server
+      dockerfile: Dockerfile
+    ports:
+      - "8081:3000"
+    environment:
+      - NODE_ENV=production

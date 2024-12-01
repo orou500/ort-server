@@ -7,3 +7,14 @@ services:
       - "8081:3000"
     environment:
       - NODE_ENV=production
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:7.4.1-alpine3.20
+    ports:
+      - "6379:6379"
+    container_name: redis
+    restart: always

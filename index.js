@@ -1,24 +1,28 @@
 const express = require('express');
 const Redis = require('ioredis');
+const cors = require('cors'); // ייבוא ספריית cors
 
 const app = express();
 const PORT = 3000;
 
-// חיבור ל-Redis, לאור משתני הסביבה שציינו ב-docker-compose
+// חיבור ל-Redis
 const redis = new Redis({
-  host: process.env.REDIS_HOST || 'localhost', // Redis host, ברירת מחדל localhost
-  port: process.env.REDIS_PORT || 6379, // Redis port, ברירת מחדל 6379
+  host: process.env.REDIS_HOST || 'localhost', // Redis host
+  port: process.env.REDIS_PORT || 6379, // Redis port
 });
 
-// דוגמה לאחסון מפתח וערך ב-Redis
-redis.set('greeting', 'Hello from Redis!');
+app.use(cors());
 
 // קריאת הנתונים מ-Redis
-app.get('/', async (req, res) => {
+app.get('/greeting', async (req, res) => {
   try {
-    // שליפת ערך מ-Redis
+    // שליפת הערך 'greeting' מ-Redis
     const greeting = await redis.get('greeting');
-    res.send(greeting || 'Default greeting');
+    if (greeting) {
+      res.json({ greeting });
+    } else {
+      res.json({ greeting: 'Default greeting' });
+    }
   } catch (error) {
     console.error('Error retrieving greeting from Redis:', error);
     res.status(500).send('Error connecting to Redis');

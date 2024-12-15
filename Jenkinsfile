@@ -1,5 +1,7 @@
 pipeline {
-    agent any
+    agent {
+        label 'docker'
+    }
     
     environment {
         DOCKERHUB_CREDENTIALS = credentials('sizex-dockerhub')
@@ -8,7 +10,7 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                    git branch: 'main', url: 'http://localhost:3000/sizex/ort-server.git'
+                    git branch: 'main', url: 'http://gitea:3000/sizex/ort-server.git'
             }
         }
 
